@@ -2,13 +2,28 @@ package br.ueg.trindade.projeto_web2_fullstack;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Usuarios {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String nome;
     private String username;
     @JsonIgnore
     private String senha;
     private String email;
 
+
+    public Usuarios() {
+        
+    }
     
 
     public Usuarios(String nome, String username, String senha, String email) {
@@ -16,6 +31,12 @@ public class Usuarios {
         this.username = username;
         this.senha = senha;
         this.email = email;
+    }
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
     public String getNome() {
         return nome;

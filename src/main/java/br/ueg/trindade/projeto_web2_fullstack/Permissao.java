@@ -1,9 +1,22 @@
 package br.ueg.trindade.projeto_web2_fullstack;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Permissao {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String nome;
     private String descricao;
+
+    public Permissao() {
+    }
 
     public Permissao(Long id, String nome, String descricao) {
         this.id = id;
