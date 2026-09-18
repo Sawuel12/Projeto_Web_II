@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,8 @@ public class Api {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    // ----------------------------------USUARIOS-------------------------------------------
 
     @GetMapping("/usuarios")
     public List<Usuarios> getAllUsuarios() {
@@ -47,6 +50,20 @@ public class Api {
         usuarioRepository.deleteById(id);
     }
 
+    @PutMapping("/usuarios/{id}")
+    public Usuarios updateUsuario(@PathVariable Long id, @RequestBody Usuarios usuarioAtualizado) {
+        Usuarios usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuario.setNome(usuarioAtualizado.getNome());
+        usuario.setUsername(usuarioAtualizado.getUsername());
+        usuario.setEmail(usuarioAtualizado.getEmail());
+        
+        return usuarioRepository.save(usuario);
+    }
+
+    // ----------------------------------PERMISSOES-------------------------------------------
+
     @GetMapping("/permissoes")
     List<Permissao> getAllPermissoes(){
         return permissaoRepository.findAll();
@@ -62,6 +79,24 @@ public class Api {
         return permissaoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Permissão não encontrada"));
     }
+
+    @PutMapping("/permissoes/{id}")
+    public Permissao updatePermissao(@PathVariable Long id, @RequestBody Permissao permissaoAtualizada) {
+        Permissao permissao = permissaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Permissão não encontrada"));
+
+        permissao.setNome(permissaoAtualizada.getNome());
+        permissao.setDescricao(permissaoAtualizada.getDescricao());
+        
+        return permissaoRepository.save(permissao);
+    }
+
+    @DeleteMapping("/permissoes/{id}")
+    public void deletePermissao(@PathVariable Long id) {
+        permissaoRepository.deleteById(id);
+    }
+
+    // ----------------------------------CATEGORIAS-------------------------------------------
 
     @GetMapping("/categorias")
     List<Categoria> getAllCategorias(){
@@ -79,4 +114,19 @@ public class Api {
             .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
     }
 
+    @PutMapping("/categorias/{id}")
+    public Categoria updateCategoria(@PathVariable Long id, @RequestBody Categoria categoriaAtualizada) {
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+        categoria.setNome(categoriaAtualizada.getNome());
+        categoria.setAtiva(categoriaAtualizada.getAtiva());
+        
+        return categoriaRepository.save(categoria);
+    }
+
+    @DeleteMapping("/categorias/{id}")
+    public void deleteCategoria(@PathVariable Long id) {
+        categoriaRepository.deleteById(id);
+    }
 }
