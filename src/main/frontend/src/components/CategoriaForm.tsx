@@ -1,4 +1,5 @@
-import { type FormEvent, useState } from "react";
+
+import { type FormEvent, useState, useEffect } from "react";
 import api from "../services/api";
 import type { Categoria } from "../types/categoria";
 
@@ -8,11 +9,20 @@ interface CategoriaFormProps {
 }
 
 function CategoriaForm({ onCategoriaSalva, categoriaEditando }: CategoriaFormProps) {
-  const [nome, setNome] = useState(categoriaEditando?.nome ?? "");
-  const [ativa, setAtiva] = useState(categoriaEditando?.ativa ?? true);
 
+  const [nome, setNome] = useState("");
+  const [ativa, setAtiva] = useState(true);
+
+  // ATUALIZAR OS CAMPOS AO SELECIONAR UMA CATEGORIA
+  useEffect(() => {
+    setNome(categoriaEditando?.nome ?? "");
+    setAtiva(categoriaEditando?.ativa ?? true);
+  }, [categoriaEditando]);
+
+  // CADASTRAR OU EDITAR CATEGORIA
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
     const dados = { nome, ativa };
 
     try {
@@ -21,7 +31,9 @@ function CategoriaForm({ onCategoriaSalva, categoriaEditando }: CategoriaFormPro
       } else {
         await api.post("/categorias", dados);
       }
+
       onCategoriaSalva();
+
     } catch (error) {
       console.error("Erro ao salvar categoria:", error);
       alert("Erro ao salvar a categoria.");
@@ -30,13 +42,14 @@ function CategoriaForm({ onCategoriaSalva, categoriaEditando }: CategoriaFormPro
 
   return (
     <form onSubmit={handleSubmit}>
+
       <input
         value={nome}
         onChange={(e) => setNome(e.target.value)}
         placeholder="Nome da Categoria"
         required
       />
-      
+
       <label style={{ marginLeft: "10px", marginRight: "10px" }}>
         <input
           type="checkbox"
@@ -49,6 +62,7 @@ function CategoriaForm({ onCategoriaSalva, categoriaEditando }: CategoriaFormPro
       <button type="submit">
         {categoriaEditando ? "Salvar alterações" : "Cadastrar"}
       </button>
+
     </form>
   );
 }

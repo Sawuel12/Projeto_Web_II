@@ -1,18 +1,14 @@
-import UsuarioList from "./components/UsuarioList";
-import PermissaoList from "./components/PermissaoList";
-import CategoriaList from "./components/CategoriaList";
+
+import UsuariosPage from "./pages/UsuariosPage";
+import PermissoesPage from "./pages/PermissoesPage";
+import CategoriasPage from "./pages/CategoriasPage";
 
 function App() {
   return (
     <div>
-      <h1>Usuários cadastrados</h1>
-      <UsuarioList />
-
-      <h1>Permissões do Sistema</h1>
-      <PermissaoList />
-
-      <h1>Categorias</h1>
-      <CategoriaList />
+      <UsuariosPage />
+      <PermissoesPage />
+      <CategoriasPage />
     </div>
   );
 }

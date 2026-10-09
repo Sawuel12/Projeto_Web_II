@@ -1,4 +1,5 @@
-import { type FormEvent, useState } from "react";
+
+import { type FormEvent, useState, useEffect } from "react";
 import api from "../services/api";
 import type { Permissao } from "../types/permissoes";
 
@@ -8,11 +9,20 @@ interface PermissaoFormProps {
 }
 
 function PermissaoForm({ onPermissaoSalva, permissaoEditando }: PermissaoFormProps) {
-  const [nome, setNome] = useState(permissaoEditando?.nome ?? "");
-  const [descricao, setDescricao] = useState(permissaoEditando?.descricao ?? "");
 
+  const [nome, setNome] = useState("");
+  const [descricao, setDescricao] = useState("");
+
+  // ATUALIZAR OS CAMPOS AO SELECIONAR UMA PERMISSÃO
+  useEffect(() => {
+    setNome(permissaoEditando?.nome ?? "");
+    setDescricao(permissaoEditando?.descricao ?? "");
+  }, [permissaoEditando]);
+
+  // CADASTRAR OU EDITAR PERMISSÃO
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
     const dados = { nome, descricao };
 
     try {
@@ -21,7 +31,9 @@ function PermissaoForm({ onPermissaoSalva, permissaoEditando }: PermissaoFormPro
       } else {
         await api.post("/permissoes", dados);
       }
+
       onPermissaoSalva();
+
     } catch (error) {
       console.error("Erro ao salvar permissão:", error);
       alert("Erro ao salvar a permissão.");
@@ -30,21 +42,25 @@ function PermissaoForm({ onPermissaoSalva, permissaoEditando }: PermissaoFormPro
 
   return (
     <form onSubmit={handleSubmit}>
+
       <input
         value={nome}
         onChange={(e) => setNome(e.target.value)}
         placeholder="Nome (ex: ADMIN)"
         required
       />
+
       <input
         value={descricao}
         onChange={(e) => setDescricao(e.target.value)}
         placeholder="Descrição da permissão"
         required
       />
+
       <button type="submit">
         {permissaoEditando ? "Salvar alterações" : "Cadastrar"}
       </button>
+
     </form>
   );
 }

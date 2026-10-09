@@ -6,9 +6,9 @@ interface PermissaoItemProps {
 
 function PermissaoItem({ permissao }: PermissaoItemProps) {
     return (
-        <li>
+        <span>
             <strong>{permissao.nome}</strong> — {permissao.descricao}
-        </li>
+        </span>
     );
 }
 

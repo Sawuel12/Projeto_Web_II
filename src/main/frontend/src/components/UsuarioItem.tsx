@@ -5,9 +5,9 @@ interface UsuarioItemProps {
 
 function UsuarioItem({ usuario }: UsuarioItemProps) {
     return (
-        <li>
+        <span>
         <strong>{usuario.nome}</strong> ({usuario.username}) — {usuario.email}
-        </li>
+        </span>
     );
 }
 

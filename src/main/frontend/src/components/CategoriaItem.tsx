@@ -6,9 +6,9 @@ interface CategoriaItemProps {
 
 function CategoriaItem({ categoria }: CategoriaItemProps) {
     return (
-        <li>
+        <span>
             <strong>{categoria.nome}</strong> — {categoria.ativa ? "Ativa" : "Inativa"}
-        </li>
+        </span>
     );
 }
 
