@@ -1,4 +1,4 @@
-package br.ueg.trindade.projeto_web2_fullstack;
+package br.ueg.trindade.projeto_web2_fullstack.model;
 
 public class UsuarioDTO {
     private String nome;
