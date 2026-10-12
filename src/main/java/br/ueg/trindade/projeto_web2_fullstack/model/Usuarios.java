@@ -1,12 +1,18 @@
 
 package br.ueg.trindade.projeto_web2_fullstack.model;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class Usuarios {
@@ -18,12 +24,22 @@ public class Usuarios {
     private String nome;
     private String username;
 
-    // Recebe a senha, mas não a retorna nas respostas JSON
+    // Permite receber a senha, mas não exibi-la no JSON
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     private String email;
 
+    // RELACIONAMENTO MUITOS-PARA-MUITOS
+    @ManyToMany
+    @JoinTable(
+        name = "usuario_permissao",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "permissao_id")
+    )
+    private Set<Permissao> permissoes = new HashSet<>();
+
+    // CONSTRUTORES
     public Usuarios() {
     }
 
@@ -34,6 +50,7 @@ public class Usuarios {
         this.email = email;
     }
 
+    // GETTERS E SETTERS
     public long getId() {
         return id;
     }
@@ -72,5 +89,14 @@ public class Usuarios {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    // GETTERS E SETTERS DAS PERMISSÕES
+    public Set<Permissao> getPermissoes() {
+        return permissoes;
+    }
+
+    public void setPermissoes(Set<Permissao> permissoes) {
+        this.permissoes = permissoes;
     }
 }

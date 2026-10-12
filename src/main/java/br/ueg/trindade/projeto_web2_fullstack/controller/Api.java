@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+// MODELS
 import br.ueg.trindade.projeto_web2_fullstack.model.Usuarios;
 import br.ueg.trindade.projeto_web2_fullstack.model.Permissao;
 import br.ueg.trindade.projeto_web2_fullstack.model.Categoria;
+
+// SERVICES
 import br.ueg.trindade.projeto_web2_fullstack.service.UsuarioService;
 import br.ueg.trindade.projeto_web2_fullstack.service.PermissaoService;
 import br.ueg.trindade.projeto_web2_fullstack.service.CategoriaService;
@@ -67,6 +71,23 @@ public class Api {
     @DeleteMapping("/usuarios/{id}")
     public void deleteUsuario(@PathVariable Long id) {
         usuarioService.excluir(id);
+    }
+
+    // ---------------- PERMISSÕES DOS USUÁRIOS ----------------
+
+    // Consultar as permissões de um usuário
+    @GetMapping("/usuarios/{id}/permissoes")
+    public Usuarios getPermissoesUsuario(@PathVariable Long id) {
+        return usuarioService.buscarPorId(id);
+    }
+
+    // Atribuir permissões a um usuário
+    @PutMapping("/usuarios/{id}/permissoes")
+    public Usuarios atualizarPermissoesUsuario(
+        @PathVariable Long id,
+        @RequestBody List<Long> idsPermissoes
+    ) {
+        return usuarioService.atribuirPermissoes(id, idsPermissoes);
     }
 
     // ---------------- PERMISSÕES ----------------
