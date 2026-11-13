@@ -1,4 +1,6 @@
 
+import { Link } from "react-router-dom";
+
 import type { Usuario } from "../types/usuario";
 import UsuarioItem from "./UsuarioItem";
 
@@ -23,18 +25,30 @@ function UsuarioList({
   return (
     <ul>
       {usuarios.map((usuario) => (
-        <li key={usuario.id} style={{ marginBottom: "10px" }}>
+        <li
+          key={usuario.id}
+          style={{ marginBottom: "10px" }}
+        >
 
-          <UsuarioItem usuario={usuario} />
+          {/* LINK PARA OS DETALHES DO USUÁRIO */}
+          <Link
+            to={`/usuarios/${usuario.id}`}
+            style={{ marginRight: "8px" }}
+          >
+            <UsuarioItem usuario={usuario} />
+          </Link>
 
+          {/* EDITAR USUÁRIO */}
           <button onClick={() => onEditar(usuario)}>
             Editar
           </button>
 
+          {/* EXCLUIR USUÁRIO */}
           <button onClick={() => onExcluir(usuario.id)}>
             Excluir
           </button>
 
+          {/* ABRIR PERMISSÕES DO USUÁRIO */}
           <button onClick={() => onPermissoes(usuario.id)}>
             Permissões
           </button>

@@ -1,5 +1,6 @@
 
-import { type FormEvent, useState, useEffect } from "react";
+import { type FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import type { Usuario } from "../types/usuario";
 
@@ -8,50 +9,39 @@ interface UsuarioFormProps {
   usuarioEditando?: Usuario | null;
 }
 
-function UsuarioForm({ onUsuarioSalvo, usuarioEditando }: UsuarioFormProps) {
+function UsuarioForm({
+  onUsuarioSalvo,
+  usuarioEditando,
+}: UsuarioFormProps) {
+  const navigate = useNavigate();
 
-  const [nome, setNome] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState(usuarioEditando?.nome ?? "");
+  const [username, setUsername] = useState(usuarioEditando?.username ?? "");
+  const [email, setEmail] = useState(usuarioEditando?.email ?? "");
   const [senha, setSenha] = useState("");
 
-  // ATUALIZAR OS CAMPOS AO EDITAR UM USUÁRIO
-  useEffect(() => {
-    setNome(usuarioEditando?.nome ?? "");
-    setUsername(usuarioEditando?.username ?? "");
-    setEmail(usuarioEditando?.email ?? "");
-    setSenha("");
-  }, [usuarioEditando]);
-
-  // CADASTRAR OU EDITAR USUÁRIO
-  async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const dados = {
-      nome,
-      username,
-      email,
-      ...(senha ? { senha } : {})
-    };
+    const dados = { nome, username, email };
 
     try {
       if (usuarioEditando) {
         await api.put(`/usuarios/${usuarioEditando.id}`, dados);
       } else {
-        await api.post("/usuarios", dados);
+        await api.post("/usuarios", { ...dados, senha });
       }
 
       onUsuarioSalvo();
-
+      navigate("/usuarios");
     } catch (error) {
       console.error("Erro ao salvar usuário:", error);
-      alert("Erro ao salvar o usuário.");
+      alert("Erro ao salvar o usuário. Verifique os dados informados.");
     }
   }
 
   return (
     <form onSubmit={handleSubmit}>
-
       <input
         value={nome}
         onChange={(e) => setNome(e.target.value)}
@@ -74,24 +64,21 @@ function UsuarioForm({ onUsuarioSalvo, usuarioEditando }: UsuarioFormProps) {
         required
       />
 
-      <input
-        type="password"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-        placeholder={
-          usuarioEditando
-            ? "Nova senha (opcional)"
-            : "Senha (mínimo 8 caracteres)"
-        }
-        required={!usuarioEditando}
-        minLength={8}
-        autoComplete="new-password"
-      />
+      {!usuarioEditando && (
+        <input
+          type="password"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          placeholder="Senha (mínimo 8 caracteres)"
+          minLength={8}
+          required
+          autoComplete="new-password"
+        />
+      )}
 
       <button type="submit">
         {usuarioEditando ? "Salvar alterações" : "Cadastrar"}
       </button>
-
     </form>
   );
 }

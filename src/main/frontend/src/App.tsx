@@ -1,55 +1,66 @@
 
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 
+import Layout from "./components/Layout";
+
+import Home from "./pages/Home";
 import UsuariosPage from "./pages/UsuariosPage";
-import PermissoesPage from "./pages/PermissoesPage";
-import CategoriasPage from "./pages/CategoriasPage";
+import UsuarioDetailPage from "./pages/UsuarioDetailPage";
 import UsuarioPermissoesPage from "./pages/UsuarioPermissoesPage";
+import PermissoesPage from "./pages/PermissoesPage";
+import PermissaoDetailPage from "./pages/PermissaoDetailPage";
+import CategoriasPage from "./pages/CategoriasPage";
+import CategoriaDetailPage from "./pages/CategoriaDetailPage";
 
 function App() {
-
-  // USUÁRIO SELECIONADO PARA ATRIBUIÇÃO
-  const [usuarioSelecionado, setUsuarioSelecionado] =
-    useState<number | null>(null);
-
-  // ABRIR A SEÇÃO DE PERMISSÕES
-  function abrirPermissoes(id: number) {
-
-    // Selecionar o usuário
-    setUsuarioSelecionado(id);
-
-    // Rolar até a seção de atribuição
-    document
-      .getElementById("atribuicao-permissoes")
-      ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-  }
-
   return (
-    <div>
+    <Routes>
+      <Route element={<Layout />}>
 
-      <UsuariosPage
-        onAbrirPermissoes={abrirPermissoes}
-      />
+        {/* PÁGINA INICIAL */}
+        <Route path="/" element={<Home />} />
 
-      <PermissoesPage />
-
-      <CategoriasPage />
-
-      <hr />
-
-      <div id="atribuicao-permissoes">
-
-        <UsuarioPermissoesPage
-          usuarioId={usuarioSelecionado}
-          onSelecionarUsuario={setUsuarioSelecionado}
+        {/* USUÁRIOS */}
+        <Route path="/usuarios" element={<UsuariosPage />} />
+        <Route
+          path="/usuarios/:id"
+          element={<UsuarioDetailPage />}
         />
 
-      </div>
+        {/* CATEGORIAS */}
+        <Route
+          path="/categorias"
+          element={<CategoriasPage />}
+        />
+        <Route
+          path="/categorias/:id"
+          element={<CategoriaDetailPage />}
+        />
 
-    </div>
+        {/* PERMISSÕES */}
+        <Route
+          path="/permissoes"
+          element={<PermissoesPage />}
+        />
+        <Route
+          path="/permissoes/:id"
+          element={<PermissaoDetailPage />}
+        />
+
+        {/* ATRIBUIR PERMISSÕES A USUÁRIOS */}
+        <Route
+          path="/atribuir-permissoes"
+          element={<UsuarioPermissoesPage />}
+        />
+
+        {/* PÁGINA NÃO ENCONTRADA */}
+        <Route
+          path="*"
+          element={<h1>Página não encontrada</h1>}
+        />
+
+      </Route>
+    </Routes>
   );
 }
 

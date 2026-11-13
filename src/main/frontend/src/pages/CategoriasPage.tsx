@@ -8,7 +8,6 @@ import CategoriaForm from "../components/CategoriaForm";
 import CategoriaList from "../components/CategoriaList";
 
 function CategoriasPage() {
-
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [editando, setEditando] = useState<Categoria | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,7 +42,6 @@ function CategoriasPage() {
       }
 
       await carregarCategorias();
-
     } catch (error) {
       console.error("Erro ao excluir categoria:", error);
       alert("Erro ao excluir a categoria.");

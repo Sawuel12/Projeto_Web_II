@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import type { Categoria } from "../types/categoria";
 import CategoriaItem from "./CategoriaItem";
 
@@ -24,9 +25,17 @@ function CategoriaList({
         <li key={categoria.id} style={{ marginBottom: "10px" }}>
           <CategoriaItem categoria={categoria} />
 
+          {" | "}
+          <Link to={`/categorias/${categoria.id}`}>
+            Detalhes
+          </Link>
+          {" | "}
+
           <button onClick={() => onEditar(categoria)}>
             Editar
           </button>
+
+          {" "}
 
           <button onClick={() => onExcluir(categoria.id)}>
             Excluir
